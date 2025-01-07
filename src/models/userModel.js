@@ -13,20 +13,13 @@ const userSchema = new mongoose.Schema(
       required: function () {
         return this.login_method === "email"; // 이메일 로그인일 경우 필수
       },
+      minlength: 6,
       maxlength: 100,
     },
     name: { 
       type: String, 
       required: true,
       maxlength: 100,
-    },
-    created_at: {
-      type: Date,
-      default: Date.now, // 생성 시 자동으로 설정
-    },
-    updated_at: {
-      type: Date,
-      default: Date.now, // 수정 시 자동 업데이트
     },
     login_method: {
       type: String,
