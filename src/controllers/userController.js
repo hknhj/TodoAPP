@@ -24,3 +24,28 @@ async function register(req, res) {
     });
   }
 };
+
+async function emailLogin(req, res) {
+  try{
+    const loginData = req.body;
+
+    // 로그인 서비스 호출출
+    const result= await userService.login(loginData);
+
+    // 성공 응답
+    res.status(200).json({
+      message: "Login successful",
+      token: result.token,
+      user: result.user,
+    });
+  } catch (err) {
+    res.status(400).json({
+      message: err.message || "Login failed",
+    });
+  }
+}
+
+module.exports = {
+  register,
+  emailLogin,
+};
