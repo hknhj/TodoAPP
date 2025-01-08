@@ -2,7 +2,6 @@ const User = require('../models/userModel');
 const bcrypt = require("bcryptjs");
 const { generateToken } = require("../utils/jwtUtils");
 
-//회원가입 서비스
 async function registerUser(userData) {
   const { email, password, name, login_method } = userData;
 
@@ -56,7 +55,79 @@ async function login(loginData) {
   };
 }
 
+async function googleLogin(loginData) {
+  const {email, name} = loginData;
+
+  // 유저 조회
+  const user = await User.findOne({email});
+  if (!user){
+    throw new Error("User not found");
+  }
+
+  // JWT 생성
+  const token = generateToken({id: user._id, email: user.email})
+
+  return {
+    token,
+    user: {
+      id: user._id,
+      email: user.email,
+      name: user.name,
+    },
+  };
+}
+
+async function getUserInfo(userId) {
+  const user = await User.findById(userId);
+  if (!user){
+    throw new Error("User not found");
+  }
+  return user;
+}
+
+async function updateUserInfo(userId, userData) {
+  // 수정 가능한 필드만 추출
+  const allowedUpdates = {};
+  
+  if (userData.password) {
+    // 비밀번호가 제공된 경우 해시화
+    const hashedPassword = await bcrypt.hash(userData.password, 10);
+    allowedUpdates.password = hashedPassword;
+  }
+    
+  if (userData.name) {
+    allowedUpdates.name = userData.name;
+  }
+
+  // 업데이트 가능한 필드만 사용하여 사용자 업데이트
+  const user = await User.findByIdAndUpdate(
+    userId, 
+    allowedUpdates, 
+    { 
+      new: true,
+      runValidators: true
+    }
+  );
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+  return user;
+}
+
+async function deleteUser(userId) {
+  const user = await User.findByIdAndDelete(userId);
+  if (!user) {
+    throw new Error("User not found");
+  }
+  return user;
+}
+
 module.exports = {
   registerUser,
   login,
+  googleLogin,
+  getUserInfo,
+  updateUserInfo,
+  deleteUser,
 };
