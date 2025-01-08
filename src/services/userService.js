@@ -56,7 +56,39 @@ async function login(loginData) {
   };
 }
 
+async function googleLogin(loginData) {
+  const {email, name} = loginData;
+
+  // 유저 조회
+  const user = await User.findOne({email});
+  if (!user){
+    throw new Error("User not found");
+  }
+
+  // JWT 생성
+  const token = generateToken({id: user._id, email: user.email})
+
+  return {
+    token,
+    user: {
+      id: user._id,
+      email: user.email,
+      name: user.name,
+    },
+  };
+}
+
+async function getUserInfo(userId) {
+  const user = await User.findById(userId);
+  if (!user){
+    throw new Error("User not found");
+  }
+  return user;
+}
+
 module.exports = {
   registerUser,
   login,
+  googleLogin,
+  getUserInfo,
 };
