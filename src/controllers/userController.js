@@ -64,10 +64,12 @@ async function emailLogin(req, res) {
     // 로그인 서비스 호출
     const result= await userService.login(loginData);
 
+    // JWT 토큰 헤더에 추가
+    res.setHeader("Authorization", `Bearer ${result.token}`);
+
     // 성공 응답
     res.status(200).json({
       message: "Login successful",
-      token: result.token,
       user: result.user,
     });
   } catch (err) {
