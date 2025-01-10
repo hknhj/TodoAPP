@@ -1,14 +1,12 @@
 const express = require("express")
 const userRoutes = require("./routes/users");
 const todoRoutes = require("./routes/todos");
-const cors = require("cors");
 require("dotenv").config();
 
 const app = express();
 
 // 미들웨어 설정
 app.use(express.json());
-app.use(cors());
 
 // 라우터 설정
 app.use("/api/users", userRoutes);
