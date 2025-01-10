@@ -29,6 +29,35 @@ async function createTodo(req, res) {
     }
 }
 
+// 할일 전체 조회 서비스
+/*
+...
+*/
+async function getTodoAllInfo(req, res) {
+    try{
+
+    } catch (err) {
+        res.status(400).json({
+            message: err.message || "할 일 조회에 실패했습니다."
+        });
+    }
+}
+
+// 할일 개별 조회 서비스
+/*
+...
+*/
+async function getTodoInfo(req, res) {
+    try{
+
+    } catch (err) {
+        res.status(400).json({
+            message: err.message || "할 일 조회에 실패했습니다."
+        });
+    }
+}
+
+
 module.exports = {
     createTodo,
 };
