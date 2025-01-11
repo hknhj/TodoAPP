@@ -35,7 +35,10 @@ async function createTodo(req, res) {
 */
 async function getTodoAllInfo(req, res) {
     try{
-
+        const todoAllData = await todoService.getTodoAllInfo(req.user.id);
+        res.status(200).json({
+            todoAllData,
+        })
     } catch (err) {
         res.status(400).json({
             message: err.message || "할 일 조회에 실패했습니다."
@@ -49,7 +52,14 @@ async function getTodoAllInfo(req, res) {
 */
 async function getTodoInfo(req, res) {
     try{
+        const userId = req.user.id;
+        const todoId = req.params.id;
 
+        const todoData = await todoService.getTodoInfo(userId, todoId);
+
+        res.status(200).json({
+            todoData,
+        })
     } catch (err) {
         res.status(400).json({
             message: err.message || "할 일 조회에 실패했습니다."
@@ -60,4 +70,6 @@ async function getTodoInfo(req, res) {
 
 module.exports = {
     createTodo,
+    getTodoAllInfo,
+    getTodoInfo,
 };

@@ -29,6 +29,26 @@ async function createTodo(todoData) {
     }
 }
 
+async function getTodoAllInfo(userId) {
+    const todos = await Todo.find({ user_id: userId });
+
+    return todos;
+}
+
+async function getTodoInfo(userId, todoId) {
+    console.log(userId, todoId);
+
+    const todo = await Todo.findOne({ _id: todoId, user_id: userId});
+
+    if (!todo) {
+        throw new Error("Todo not found for access denied");
+    }
+
+    return todo;
+}
+
 module.exports = {
-    createTodo
+    createTodo,
+    getTodoAllInfo,
+    getTodoInfo,
 };
