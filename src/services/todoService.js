@@ -47,8 +47,37 @@ async function getTodoInfo(userId, todoId) {
     return todo;
 }
 
+async function updateTodo(userId, todoId, todoData){
+    const updatedTodo = await Todo.findOneAndUpdate(
+        { _id: todoId, user_id: userId },
+        { $set: todoData },
+        { new: true, runValidators: true }
+    );
+
+    if (!updatedTodo) {
+        throw new Error("해당 할 일을 찾을 수 없습니다.");
+    }
+
+    return updatedTodo;
+    
+}
+
+async function deleteTodo(userId, todoId){
+    const deletedTodo = await Todo.findOneAndDelete(
+        { _id: todoId, user_id: userId }
+    );
+
+    if (!deletedTodo) {
+        throw new Error("해당 할 일을 삭제할 수 없습니다.");
+    }
+
+    return deleteTodo;
+}
+
 module.exports = {
     createTodo,
     getTodoAllInfo,
     getTodoInfo,
+    updateTodo,
+    deleteTodo,
 };

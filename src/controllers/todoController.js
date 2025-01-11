@@ -67,9 +67,48 @@ async function getTodoInfo(req, res) {
     }
 }
 
+async function updateTodo(req, res) {
+    try{
+        const userId = req.user.id;
+        const todoId = req.params.id;
+        const todoData = req.body;
+
+        const updatedTodo = await todoService.updateTodo(userId, todoId, todoData);
+
+        res.status(200).json({
+            message: "Todo가 성공적으로 업데이트되었습니다.",
+            todo: updatedTodo,
+        });
+    } catch (err) {
+        res.status(400),json({
+            message: err.message || "Todo 업데이트에 실패했습니다.",
+        });
+    }
+}
+
+async function deleteTodo(req, res) {
+    try{
+        const userId = req.user.id;
+        const todoId = req.params.id;
+
+        const deletedTodo = await todoService.deleteTodo(userId, todoId);
+
+        res.status(200).json({
+            message: "Todo가 성공적으로 삭제되었습니다.",
+            todo: deletedTodo,
+        });
+    } catch (err) {
+        res.status(400),json({
+            message: err.message || "Todo 삭제에 실패했습니다.",
+        });
+    }
+}
+
 
 module.exports = {
     createTodo,
     getTodoAllInfo,
     getTodoInfo,
+    updateTodo,
+    deleteTodo,
 };
