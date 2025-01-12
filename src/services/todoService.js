@@ -19,7 +19,12 @@ async function createTodo(todoData) {
         const savedTodo = await todo.save();
         
         // populate를 사용하여 user 정보 포함
-        return await savedTodo.populate('user_id', 'name email');
+        const populatedTodo = await savedTodo.populate('user_id', 'name email');
+
+        return {
+            id: populatedTodo._id,
+            ...populatedTodo.toObject()
+        };
         
     } catch (error) {
         if (error.name === 'ValidationError') {

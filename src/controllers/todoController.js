@@ -20,7 +20,7 @@ async function createTodo(req, res) {
         const todo = await todoService.createTodo(todoData);
         res.status(201).json({
             message:  "할 일이 성공적으로 생성되었습니다",
-            todo
+            todo: todo,
         });
     } catch (err) {
         res.status(400).json({ 
