@@ -20,7 +20,7 @@ async function createTodo(req, res) {
         const todo = await todoService.createTodo(todoData);
         res.status(201).json({
             message:  "할 일이 성공적으로 생성되었습니다",
-            todo
+            todo: todo,
         });
     } catch (err) {
         res.status(400).json({ 
@@ -29,6 +29,86 @@ async function createTodo(req, res) {
     }
 }
 
+// 할일 전체 조회 서비스
+/*
+...
+*/
+async function getTodoAllInfo(req, res) {
+    try{
+        const todoAllData = await todoService.getTodoAllInfo(req.user.id);
+        res.status(200).json({
+            todoAllData,
+        })
+    } catch (err) {
+        res.status(400).json({
+            message: err.message || "할 일 조회에 실패했습니다."
+        });
+    }
+}
+
+// 할일 개별 조회 서비스
+/*
+...
+*/
+async function getTodoInfo(req, res) {
+    try{
+        const userId = req.user.id;
+        const todoId = req.params.id;
+
+        const todoData = await todoService.getTodoInfo(userId, todoId);
+
+        res.status(200).json({
+            todoData,
+        })
+    } catch (err) {
+        res.status(400).json({
+            message: err.message || "할 일 조회에 실패했습니다."
+        });
+    }
+}
+
+async function updateTodo(req, res) {
+    try{
+        const userId = req.user.id;
+        const todoId = req.params.id;
+        const todoData = req.body;
+
+        const updatedTodo = await todoService.updateTodo(userId, todoId, todoData);
+
+        res.status(200).json({
+            message: "Todo가 성공적으로 업데이트되었습니다.",
+            todo: updatedTodo,
+        });
+    } catch (err) {
+        res.status(400),json({
+            message: err.message || "Todo 업데이트에 실패했습니다.",
+        });
+    }
+}
+
+async function deleteTodo(req, res) {
+    try{
+        const userId = req.user.id;
+        const todoId = req.params.id;
+
+        const deletedTodo = await todoService.deleteTodo(userId, todoId);
+
+        res.status(200).json({
+            message: "Todo가 성공적으로 삭제되었습니다.",
+            todo: deletedTodo,
+        });
+    } catch (err) {
+        res.status(400),json({
+            message: err.message || "Todo 삭제에 실패했습니다.",
+        });
+    }
+}
+
+
 module.exports = {
     createTodo,
+    getTodoAllInfo,
+    getTodoInfo,
+    updateTodo,
+    deleteTodo,
 };
