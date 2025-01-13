@@ -46,12 +46,12 @@ jobs:
     # 6️⃣ Docker 이미지 빌드
     - name: Build Docker image
       run: |
-        docker build -t ${{ secrets.DOCKER_USERNAME }}/todoapp:latest .
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/todoapp:latest .
 
     # 7️⃣ Docker Hub로 푸시
     - name: Push Docker image to Docker Hub
       run: |
-        docker push ${{ secrets.DOCKER_USERNAME }}/todoapp:latest
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/todoapp:latest
     
 
     
