@@ -41,6 +41,25 @@ jobs:
       run: |
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/todoapp:latest
     
+  run-docker-image-on-ec2:
+    needs: build-and-push
+    runs-on: self-hosted
 
-    
+    steps:
+    # 1. Docker pull
+    - name: docker pull
+      run: docker pull ${{ secrets.DOCKERHUB_USERNAME }}/todoapp:latest
+
+     # 2. Docker container stop
+    - name: stop container
+      run: |
+        if [ $(sudo docker ps -a -q -f name=todoapp) ]; then
+          docker stop todoapp
+        else
+          echo "Container todoapp-container not found or already stopped"
+        fi
+
+    # 3. Docker run new container
+    - name: run new container
+      run: docker run -d --rm --name todoapp --env-file /home/ubuntu/TodoAPP/.env -p 3000:3000 hknhj/todoapp:latest
     
